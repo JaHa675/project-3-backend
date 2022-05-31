@@ -25,15 +25,6 @@ User.init({
         allowNull: false,
         unique: true
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        required: true,
-        validate: {
-            isEmail: true,
-        },
-    },
     password: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -41,25 +32,13 @@ User.init({
             len: [8]
         }
     },
-    is_online: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    },
-    image_url: {
-        type: DataTypes.STRING,
-        defaultValue: null
-    }
 }, {
     hooks: {
         beforeCreate: async data => {
-            data.email = data.email.toLowerCase();
             data.password = await hash(data.password, 10);
             return data;
         },
         beforeUpdate: async data => {
-            if (data.email) {
-                data.email = data.email.toLowerCase();
-            }
             if (data.password) {
                 data.password = await hash(data.password, 10);
             }
