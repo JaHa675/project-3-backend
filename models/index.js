@@ -1,7 +1,7 @@
 const Character = require("./Character");
 const User = require("./User");
 
-User.hasMany(Character, { foreignKey: 'id', onDelete: 'SET NULL' });
-Character.belongsTo(User, { foreignKey: 'id' });
+User.hasMany(Character);
+Character.belongsTo(User);
 
 module.exports = { Character, User };

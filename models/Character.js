@@ -16,6 +16,15 @@ Character.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
+    class:{
+        type: DataTypes.STRING,
+        allowNull:false,
+    },
+    level:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+    },
 }, {
     sequelize,
     freezeTableName: true,
