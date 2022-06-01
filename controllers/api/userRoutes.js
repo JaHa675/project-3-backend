@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const {User} = require('../../models/User')
+
 
 router.get('/', async (req, res) => {
     try {
@@ -45,4 +47,4 @@ router.post("/login", async (req, res) => {
     }
   });
 
-export default router
+module.exports = router;
