@@ -10,5 +10,4 @@ router.get("/sessions", (req, res) => {
     res.json(req.session)
 });
 
-
-export default router;
+module.exports = router;
