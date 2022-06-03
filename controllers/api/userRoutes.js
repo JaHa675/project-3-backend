@@ -47,4 +47,20 @@ router.post("/login", async (req, res) => {
     }
   });
 
+  router.post('/logout', async (req, res) => {
+    try {
+      if (req.session.user.logged_in) {
+        await User.update({ is_online: false }, { where: { id: req.session.user.user_id } });
+        req.session.destroy(() => {
+          res.status(204).end();
+        });
+      } else {
+        res.status(404).end();
+      }
+    } catch (err) {
+      console.log("err: ", err);
+      res.status(500).json(err);
+    }
+  });
+
 module.exports = router;
