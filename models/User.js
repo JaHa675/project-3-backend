@@ -31,6 +31,10 @@ User.init({
             len: [8]
         }
     },
+    is_online: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    },
 }, {
     hooks: {
         beforeCreate: async data => {

@@ -1,50 +1,82 @@
-const router = require("express").Router();
-const {User} = require('../../models/User')
+const express = require('express');
+const router = express.Router();
+const {User,Character} = require('../models');
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
+const bcrypt = require("bcrypt");
+const {withAuth} = require("../utils/tokenAuth")
 
+// GET ALL
+router.get("/",(req,res)=>{
+    User.findAll({
+        include:[Character]
+    }).then(users=>{
+        res.json(users)
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json({msg:"an error occured",err})
+    })
+})
+router.get("/verifyToken",withAuth,(req,res)=>{
+    res.json({userId:req.user})
+})
 
-router.get('/', async (req, res) => {
-    try {
-        const data = await User.findAll({ include: { all: true } });
-        res.json(data);
-    } catch (err) {
-        console.log("err: ", err);
-        res.status(500).json({ msg: "an error occurred: ", err });
-    }
-});
+// GET ONE
+router.get("/:id",(req,res)=>{
+    User.findByPk(req.params.id,{
+        include:[Character]
+    }).then(user=>{
+        if(!user) {
+            return res.status(404).json({msg:"no record found!"})
+        }
+        res.json(user)
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json({msg:"an error occured",err})
+    })
+})
 
-router.get('/:id', async (req, res) => {
-    try {
-        const data = await User.findByPk(req.params.id, { include: { all: true } });
-        data === null ? res.status(404).json({ message: 'No user with this id!' }) : res.status(200).json(data);
-    } catch (err) {
-        console.log("err: ", err);
-        res.status(500).json(err);
-    }
-});
-
-router.post("/login", async (req, res) => {
-    try {
-      req.body.user_name = req.body.user_name.toLowerCase();
-      const data = await User.findOne({ where: { user_name: req.body.user_name } })
-      if (!data) {
-        res.status(400).json({ msg: "'Incorrect email or password, please try again'" });
-        return;
-      }
-      const validPassword = await data.checkPassword(req.body.password);
-      if (validPassword) {
-        console.log(data)
-        req.session.user = { user_id: data.id, logged_in: true };
-        await User.update({ is_online: true }, { where: { id: data.id } });
-        req.session.save(() => {
-          return res.json(data);
+// CREATE NEW
+router.post("/",(req,res)=>{
+    User.create(req.body).then(newUser=>{
+        const token = jwt.sign({
+            userId:newUser.id
+        },process.env.JWT_SECRET,{
+            expiresIn:"6h"
         })
-      } else {
-        return res.status(400).json({ msg: "'Incorrect email or password, please try again'" })
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ msg: "an error occurred", err });
-    }
-  });
+        res.json({
+            user:newUser,
+            token:token
+        })
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json({msg:"an error occurred",err})
+    })
+})
+
+// LOGIN
+router.post("/login",(req,res)=>{
+    User.findOne({
+        where:{
+            username:req.body.username
+        }
+    }).then(foundUser=>{
+        if(!foundUser){
+            return res.status(401).json({msg:"invalid login credentials"})
+        }
+        if(bcrypt.compareSync(req.body.password,foundUser.password)){
+            const token = jwt.sign({
+                userId:foundUser.id
+            },process.env.JWT_SECRET,{
+                expiresIn:"6h"
+            })
+            return res.json({
+                user:foundUser,
+                token:token
+            })
+        }
+        return res.status(401).json({msg:"invalid login credentials"})
+    })
+})
 
 module.exports = router;
