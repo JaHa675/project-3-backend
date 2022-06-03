@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const {User,Character} = require('../models');
+const {User,Character} = require('../../models');
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const bcrypt = require("bcrypt");
-const {withAuth} = require("../utils/tokenAuth")
+const {withAuth} = require("../../utils/tokenAuth")
 
 // GET ALL
 router.get("/",(req,res)=>{
