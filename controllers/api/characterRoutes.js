@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { User, Character } = require("../models");
-const {withAuth} = require("../utils/tokenAuth")
+const { User, Character } = require("../../models");
+const {withAuth} = require("../../utils/tokenAuth")
 
 // GET ALL
 router.get("/", (req, res) => {
