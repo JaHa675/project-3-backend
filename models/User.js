@@ -30,20 +30,16 @@ User.init({
         validate: {
             len: [8]
         }
-    },
-    is_online: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    },
+    }
 }, {
     hooks: {
         beforeCreate: async data => {
-            data.password = await hash(data.password, 10);
+            data.password = await bcrypt.hash(data.password, 10);
             return data;
         },
         beforeUpdate: async data => {
             if (data.password) {
-                data.password = await hash(data.password, 10);
+                data.password = await bcrypt.hash(data.password, 10);
             }
             return data;
         }
