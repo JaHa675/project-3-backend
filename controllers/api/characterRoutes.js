@@ -17,8 +17,8 @@ router.get("/", (req, res) => {
 
 // GET ONE
 router.get("/:id", (req, res) => {
-  Game.findByPk(req.params.id, {
-    include: [Note],
+  Character.findByPk(req.params.id, {
+    include: [User],
   })
     .then((character) => {
       if (!character) {
@@ -28,7 +28,7 @@ router.get("/:id", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ msg: "an error occured", err });
+      res.status(500).json({ msg: "an error occurred", err });
     });
 });
 
@@ -39,7 +39,6 @@ router.post("/",withAuth, (req, res) => {
   Character.create({
       character_name:req.body.character_name,
       class:req.body.class,
-      level:req.body.level,
       UserId:req.user
   })
     .then((newCharacter) => {
