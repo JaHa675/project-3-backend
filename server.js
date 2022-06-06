@@ -12,7 +12,7 @@ const app = express();
 
 //PROD MODE
 app.use(cors({
-    origin:"https://shrouded-lowlands-90094.herokuapp.com/"
+    origin:"https://obscure-waters-79777.herokuapp.com/"
 }));
 
 const PORT = process.env.PORT || 3001;
