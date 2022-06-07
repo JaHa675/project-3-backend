@@ -12,7 +12,7 @@ const app = express();
 
 //PROD MODE
 app.use(cors({
-    origin:"https://battle-trail.herokuapp.com/"
+    origin:"https://battle-trail.herokuapp.com"
 }));
 
 const PORT = process.env.PORT || 3001;
