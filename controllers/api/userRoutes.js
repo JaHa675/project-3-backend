@@ -58,7 +58,7 @@ router.post("/",(req,res)=>{
 router.post("/login",(req,res)=>{
     User.findOne({
         where:{
-            username:req.body.username
+            user_name:req.body.user_name
         }
     }).then(foundUser=>{
         if(!foundUser){
