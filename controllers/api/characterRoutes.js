@@ -34,7 +34,6 @@ router.get("/:id", (req, res) => {
 
 // CREATE
 router.post("/",withAuth, (req, res) => {
-  //TODO: protecc route, get UserId from token
   console.log(req.user)
   Character.create({
       character_name:req.body.character_name,

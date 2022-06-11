@@ -10,6 +10,8 @@ const app = express();
 //DEVELOP MODE
 app.use(cors());
 
+app.options('/characters', cors())
+app.options('/users', cors())
 //PROD MODE
 // app.use(cors({
 //     origin:"https://battle-trail.herokuapp.com"
