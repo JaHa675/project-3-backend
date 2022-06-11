@@ -8,12 +8,14 @@ const sequelize = require('./config/connection');
 // =============================================================
 const app = express();
 //DEVELOP MODE
-// app.use(cors());
+app.use(cors());
 
+app.options('/characters', cors())
+app.options('/users', cors())
 //PROD MODE
-app.use(cors({
-    origin:"https://battle-trail.herokuapp.com"
-}));
+// app.use(cors({
+//     origin:"https://battle-trail.herokuapp.com"
+// }));
 
 const PORT = process.env.PORT || 3001;
 // Requiring our models for syncing
